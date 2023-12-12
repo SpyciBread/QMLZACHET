@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
+//Privet
 Window {
     visible: true
     width: 640

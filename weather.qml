@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-//Privet
+//Poka
 Window {
     visible: true
     width: 640

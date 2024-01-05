@@ -5,10 +5,11 @@ import QtQuick.Controls
 //Poka
 Window {
     id: mainWindow
+    signal signalExit
     visible: true
     width: 480
     height: 640
-    title: qsTr("wether app")
+    title: qsTr("weather app")
 
     Image{
         id: background
@@ -27,14 +28,26 @@ Window {
             Column{
                 spacing: 10
 
-                Text {
-                    id: cityState
-                    //anchors.horizontalCenter: parent.horizontalCenter
-                    opacity: 1
-                    text: "Ярославль Россия"
-                    font.family: "Helvetica"
-                    font.pointSize: 24
-                    color: "black"
+                Row{
+                    id: titleRow
+                    spacing: 10
+
+                    Image{
+                       source: "pics/icons/gerbYar.png"
+                        width: 75
+                        height: 100
+                    }
+
+                    Text {
+                        id: cityState
+                        anchors.verticalCenter: titleRow.verticalCenter
+                        //verticalAlignment: cityState.AlignCenter
+                        opacity: 1
+                        text: "Ярославль Россия"
+                        font.family: "Helvetica"
+                        font.pointSize: 24
+                        color: "black"
+                    }
                 }
 
                 Button {
@@ -45,7 +58,30 @@ Window {
                     }
                 }
 
-                Cell { cellColor: "white"; onClicked: cityState.color = cellColor }
+                Grid {
+                    id: dayPicker
+                    //x: 4; anchors.bottom: page.bottom; anchors.bottomMargin: 4
+                    anchors.horizontalCenter: mainWindow.horizontalCenter
+                    rows: 2; columns: 3; spacing: 5
+
+                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                }
+
+                //Cell { cellColor: "white"; onClicked: firstWindow.show() }
+
+                Day{
+                    id: firstWindow
+                    title: qsTr("Первое окно")
+
+                    onSignalExit: {
+                        firstWindow.close()
+                    }
+                }
 
                 Label {
                     id: answer
@@ -56,8 +92,10 @@ Window {
                     color: "black"
                 }
         }
+    }
 
-
+    onSignalExit: {
+        mainWindow.close()
     }
 
     function decodeJson(jsonData) {

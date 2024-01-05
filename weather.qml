@@ -2,34 +2,62 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-//Privet
+//Poka
 Window {
+    id: mainWindow
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
+    width: 480
+    height: 640
+    title: qsTr("wether app")
+
+    Image{
+        id: background
+        width: 480
+        height: 640
+        opacity: 0.5
+        fillMode: Image.PreserveAspectCrop
+        source: "pics/background/winter.jpeg"
+    }
 
     ScrollView {
         id: scrollView
         width: parent.width
         height: parent.height
 
-        Column {
-            spacing: 10
-            Button {
-                id: buttonUser
-                text: "Запросить пользователей"
-                onClicked: {
-                    requestUser();
-                }
-            }
+            Column{
+                spacing: 10
 
-            Label {
-                id: answer
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "a"
-            }
+                Text {
+                    id: cityState
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    opacity: 1
+                    text: "Ярославль Россия"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
+                }
+
+                Button {
+                    id: buttonUser
+                    text: "Запросить пользователей"
+                    onClicked: {
+                        requestUser();
+                    }
+                }
+
+                Cell { cellColor: "white"; onClicked: cityState.color = cellColor }
+
+                Label {
+                    id: answer
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: ""
+                    font.family: "Helvetica"
+                    font.pointSize: 10
+                    color: "black"
+                }
         }
+
+
     }
 
     function decodeJson(jsonData) {
@@ -64,13 +92,13 @@ Window {
             var davlenie = item.parts.day.pressure_mm;
             var alert = item.parts.day.condition;
             decodedJson = decodedJson +
-                "Дата: " + date + " " +
-                "Перепад температур: min: " + minT + " max: " + maxT+ " " +
-                "Направление ветра: " + directionWind + " " +
-                "Скорость ветра: " + speedWind + "м/с " +
-                "Влажность: " + vlaznost + "% " +
-                "Давление: " + davlenie + "мм рт.ст. " +
-                "Предупреждение: " + alert + "\n";
+                "Дата: " + date + " \n" +
+                "Перепад температур: min: " + minT + " max: " + maxT+ " \n" +
+                "Направление ветра: " + directionWind + " \n" +
+                "Скорость ветра: " + speedWind + "м/с \n" +
+                "Влажность: " + vlaznost + "% \n" +
+                "Давление: " + davlenie + "мм рт.ст. \n" +
+                "Предупреждение: " + alert + "\n\n";
         });
         return decodedJson;
         //return JSON.stringify(list, null, 2);

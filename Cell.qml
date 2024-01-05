@@ -5,7 +5,9 @@ Item{
     property alias cellColor: rectangle.color
     signal clicked(cellColor: color)
 
+
     width: 155; height: 100
+
 
     Rectangle {
         id: rectangle
@@ -16,5 +18,6 @@ Item{
     MouseArea {
         anchors.fill: parent
         onClicked: firstWindow.show()
+
     }
 }

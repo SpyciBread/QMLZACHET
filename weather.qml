@@ -11,6 +11,7 @@ Window {
     height: 640
     title: qsTr("weather app")
 
+
     Image{
         id: background
         width: 480
@@ -27,6 +28,7 @@ Window {
 
             Column{
                 spacing: 10
+
 
                 Row{
                     id: titleRow
@@ -57,6 +59,7 @@ Window {
                         requestUser();
                     }
                 }
+
 
                 Grid {
                     id: dayPicker
@@ -92,6 +95,8 @@ Window {
                     color: "black"
                 }
         }
+
+
     }
 
     onSignalExit: {

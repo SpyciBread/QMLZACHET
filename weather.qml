@@ -27,8 +27,10 @@ Window {
 
             Column{
                 spacing: 10
+
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
+
 
                 Row{
                     id: titleRow
@@ -38,6 +40,7 @@ Window {
                        source: "pics/icons/gerbYar.png"
                         width: 75
                         height: 110
+
                     }
 
                     Text {
@@ -56,6 +59,7 @@ Window {
                     id: buttonUser
                     text: "Запросить пользователей"
                     onClicked: {
+
                        requestUser();
                     }
                 }
@@ -84,6 +88,7 @@ Window {
                     text: ""
                 }
 
+
                 Day{
                     id: firstWindow
                     title: qsTr("Первое окно")
@@ -92,7 +97,14 @@ Window {
                         firstWindow.close()
                     }
                 }
+
         }
+
+
+    }
+
+    onSignalExit: {
+        mainWindow.close()
     }
 
     onSignalExit: {

@@ -9,6 +9,7 @@ Item{
 
     width: 180; height: 130
 
+
     Rectangle {
         id: rectangle
         border.color: "black"

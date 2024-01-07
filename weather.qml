@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-
 Window {
     id: mainWindow
     signal signalExit
@@ -19,84 +18,68 @@ Window {
         fillMode: Image.PreserveAspectCrop
         source: "pics/background/winter.jpeg"
     }
-
     ScrollView {
         id: scrollView
         width: parent.width
         height: parent.height
+        ListModel {
+            id: dataModel
 
-            Column{
+        }
+
+        Column{
+            spacing: 10
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+
+            Row{
+                id: titleRow
                 spacing: 10
 
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
+                Image{
+                   source: "pics/icons/gerbYar.png"
+                    width: 75
+                    height: 110
 
-
-                Row{
-                    id: titleRow
-                    spacing: 10
-
-                    Image{
-                       source: "pics/icons/gerbYar.png"
-                        width: 75
-                        height: 110
-
-                    }
-
-                    Text {
-                        id: cityState
-                        anchors.verticalCenter: titleRow.verticalCenter
-                        //verticalAlignment: cityState.AlignCenter
-                        opacity: 1
-                        text: "Ярославль Россия"
-                        font.family: "Helvetica"
-                        font.pointSize: 24
-                        color: "black"
-                    }
-                }
-
-                Button {
-                    id: buttonUser
-                    text: "Запросить пользователей"
-                    onClicked: {
-
-                       requestUser();
-                    }
-                }
-
-                Grid {
-                    id: dayPicker
-                    //anchors.horizontalCenter: mainWindow.horizontalCenter
-                    //anchors.verticalCenter: mainWindow.verticalCenter
-                    rows: 2; columns: 3; spacing: 5
-
-                    Cell { id: cell1; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
-                    Cell { id: cell2; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
-                    Cell { id: cell3; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
-                    Cell { id: cell4; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
-                    Cell { id: cell5; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
-                    Cell { id: cell6; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
-                }
-
-                Image {
-                    id: icon
-                    source: ""
                 }
 
                 Text {
-                    id: test
-                    text: ""
-                }
+                    id: cityState
+                    anchors.verticalCenter: titleRow.verticalCenter
+                    //verticalAlignment: cityState.AlignCenter
+                    opacity: 1
+                    text: "Ярославль Россия"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "black"
 
-
-                Day{
-                    id: firstWindow
-                    title: qsTr("Первое окно")
-
-                    onSignalExit: {
-                        firstWindow.close()
+                    Component.onCompleted: {
+                        requestUser();
                     }
                 }
+            }
+
+            GridView {
+
+                anchors.left: titleRow.horizontalCenter
+
+                width: 760; height: 250
+
+                id: grid
+
+                cellWidth: 190
+                cellHeight: 140
+
+                model: dataModel
+                delegate: Cell {
+                    cellColor: "white"; cellText: model.text; cellImage: model.textIcon; onClicked: firstWindow.show()
+                }
+                flow: GridView.FlowLeftToRight
+                snapMode: GridView.SnapToRow
+                highlight: Rectangle { color: "lightblue"; radius: 5 }
+            }
 
         }
 
@@ -107,14 +90,13 @@ Window {
         mainWindow.close()
     }
 
-    onSignalExit: {
-        mainWindow.close()
-    }
-
     function decodeJson(jsonData) {
         var list = jsonData.forecasts;
         var decodedJson = "";
+        var i = 0;
+
         list.forEach(function(item) {
+
             var date = item.date;
             var minT = item.parts.night_short.temp;
             var maxT = item.parts.day.temp_max;
@@ -143,40 +125,25 @@ Window {
             var davlenie = item.parts.day.pressure_mm;
             var alert = item.parts.day.condition;
 
-            icon.source = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-
-            cell1.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-            cell2.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-            cell3.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-            cell4.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-            cell5.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-            cell6.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
-
-            //test.text = icon.source;
-
-            decodedJson = decodedJson +
+            decodedJson =
                 "Дата: " + date + " \n" +
                 "Перепад температур: min: " + minT + " max: " + maxT+ " \n" +
                 "Направление ветра: " + directionWind + " \n" +
                 "Скорость ветра: " + speedWind + "м/с \n" +
                 "Влажность: " + vlaznost + "% \n" +
-                "Давление: " + davlenie + "мм рт.ст. \n" +
-                "Предупреждение: " + alert + "\n\n";
+                "Давление: " + davlenie + "мм рт.ст. \n";
+                //"Предупреждение: " + alert + "\n\n";
+
+                if(typeof dataModel.get(6) === "undefined"){
+                    dataModel.append({ text: decodedJson,
+                    textIcon: "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg" });
+                }
+
+            i++;
         });
 
         return decodedJson;
         //return JSON.stringify(list, null, 2);
-    }
-
-    function setIconsText(str){
-        var list = str.split("\n\n");
-
-        cell1.cellText = list[0];
-        cell2.cellText = list[1];
-        cell3.cellText = list[2];
-        cell4.cellText = list[3];
-        cell5.cellText = list[4];
-        cell6.cellText = list[5];
     }
 
     function requestUser() {
@@ -185,7 +152,6 @@ Window {
         xhr.onreadystatechange = function() {
             var jsonResponse = JSON.parse(xhr.responseText);
             var jsonString = decodeJson(jsonResponse);
-            setIconsText(jsonString);
         }
 
         xhr.open("GET", "https://api.weather.yandex.ru/v2/forecast?lat=57.6299&lon=39.8737&lang=ru_RU&limit=7&hours=true");

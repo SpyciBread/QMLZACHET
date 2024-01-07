@@ -1,13 +1,13 @@
 import QtQuick
 
-
 Item{
-    id: day
-    property alias dataT: dataText.text
-
+    id: testDay
+    property alias dataTest: dataText.text
+    width: 180; height: 130
     Text{
         id: dataText
         text: "12"
+        
     }
 }
 

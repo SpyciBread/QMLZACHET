@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-//Poka
+
 Window {
     id: mainWindow
     signal signalExit
@@ -11,11 +11,10 @@ Window {
     height: 640
     title: qsTr("weather app")
 
-
     Image{
         id: background
-        width: 480
-        height: 640
+        width: parent.width
+        height: parent.height
         opacity: 0.5
         fillMode: Image.PreserveAspectCrop
         source: "pics/background/winter.jpeg"
@@ -29,6 +28,9 @@ Window {
             Column{
                 spacing: 10
 
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
 
                 Row{
                     id: titleRow
@@ -37,7 +39,8 @@ Window {
                     Image{
                        source: "pics/icons/gerbYar.png"
                         width: 75
-                        height: 100
+                        height: 110
+
                     }
 
                     Text {
@@ -56,26 +59,35 @@ Window {
                     id: buttonUser
                     text: "Запросить пользователей"
                     onClicked: {
-                        requestUser();
+
+                       requestUser();
                     }
                 }
 
-
                 Grid {
                     id: dayPicker
-                    //x: 4; anchors.bottom: page.bottom; anchors.bottomMargin: 4
-                    anchors.horizontalCenter: mainWindow.horizontalCenter
+                    //anchors.horizontalCenter: mainWindow.horizontalCenter
+                    //anchors.verticalCenter: mainWindow.verticalCenter
                     rows: 2; columns: 3; spacing: 5
 
-                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
-                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
-                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
-                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
-                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
-                    Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                    Cell { id: cell1; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
+                    Cell { id: cell2; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
+                    Cell { id: cell3; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
+                    Cell { id: cell4; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
+                    Cell { id: cell5; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
+                    Cell { id: cell6; cellColor: "white"; cellText: ""; cellImage: ""; onClicked: firstWindow.show() }
                 }
 
-                //Cell { cellColor: "white"; onClicked: firstWindow.show() }
+                Image {
+                    id: icon
+                    source: ""
+                }
+
+                Text {
+                    id: test
+                    text: ""
+                }
+
 
                 Day{
                     id: firstWindow
@@ -86,17 +98,13 @@ Window {
                     }
                 }
 
-                Label {
-                    id: answer
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: ""
-                    font.family: "Helvetica"
-                    font.pointSize: 10
-                    color: "black"
-                }
         }
 
 
+    }
+
+    onSignalExit: {
+        mainWindow.close()
     }
 
     onSignalExit: {
@@ -134,6 +142,18 @@ Window {
             var vlaznost = item.parts.day.humidity;
             var davlenie = item.parts.day.pressure_mm;
             var alert = item.parts.day.condition;
+
+            icon.source = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+
+            cell1.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+            cell2.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+            cell3.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+            cell4.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+            cell5.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+            cell6.cellImage = "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg";
+
+            //test.text = icon.source;
+
             decodedJson = decodedJson +
                 "Дата: " + date + " \n" +
                 "Перепад температур: min: " + minT + " max: " + maxT+ " \n" +
@@ -143,8 +163,20 @@ Window {
                 "Давление: " + davlenie + "мм рт.ст. \n" +
                 "Предупреждение: " + alert + "\n\n";
         });
+
         return decodedJson;
         //return JSON.stringify(list, null, 2);
+    }
+
+    function setIconsText(str){
+        var list = str.split("\n\n");
+
+        cell1.cellText = list[0];
+        cell2.cellText = list[1];
+        cell3.cellText = list[2];
+        cell4.cellText = list[3];
+        cell5.cellText = list[4];
+        cell6.cellText = list[5];
     }
 
     function requestUser() {
@@ -153,7 +185,7 @@ Window {
         xhr.onreadystatechange = function() {
             var jsonResponse = JSON.parse(xhr.responseText);
             var jsonString = decodeJson(jsonResponse);
-            answer.text = jsonString;
+            setIconsText(jsonString);
         }
 
         xhr.open("GET", "https://api.weather.yandex.ru/v2/forecast?lat=57.6299&lon=39.8737&lang=ru_RU&limit=7&hours=true");

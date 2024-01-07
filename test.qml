@@ -50,7 +50,8 @@ Window {
             id: buttonUser
             text: "Тест"
             onClicked: {
-               listFunction();
+               //listFunction();
+               cellModel.append({});
             }
         }
     }

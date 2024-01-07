@@ -5,6 +5,7 @@ Item{
     property alias cellColor: rectangle.color
     property alias cellText: txt.text
     property alias cellImage: image.source
+
     signal clicked(cellColor: color)
 
     width: 180; height: 130
@@ -31,6 +32,7 @@ Item{
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
+
     }
 
     MouseArea {

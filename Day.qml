@@ -1,5 +1,6 @@
 import QtQuick
 
+
 Item{
     id: day
     property alias dataT: dataText.text
@@ -9,3 +10,4 @@ Item{
         text: "12"
     }
 }
+

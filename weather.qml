@@ -6,8 +6,8 @@ Window {
     id: mainWindow
     signal signalExit
     visible: true
-    width: 480
-    height: 640
+    width: 640
+    height: 480
     title: qsTr("weather app")
 
     Image{
@@ -74,7 +74,7 @@ Window {
 
                 model: dataModel
                 delegate: Cell {
-                    cellColor: "white"; cellText: model.text; cellImage: model.textIcon; onClicked: firstWindow.show()
+                    cellColor: "white"; cellText: model.text; cellImage: model.textIcon; onClicked: firstWindow.close()
                 }
                 flow: GridView.FlowLeftToRight
                 snapMode: GridView.SnapToRow

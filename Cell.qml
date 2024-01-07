@@ -37,6 +37,8 @@ Item{
 
     MouseArea {
         anchors.fill: parent
-        onClicked: firstWindow.show()
+        onClicked: {
+            newDay.visible = true
+        }
     }
 }

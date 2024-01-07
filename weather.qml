@@ -54,21 +54,17 @@ Window {
                     font.family: "Helvetica"
                     font.pointSize: 24
                     color: "black"
-                }
-            }
 
-            Button {
-                id: buttonUser
-                text: "Запросить пользователей"
-                onClicked: {
-
-                   requestUser();
+                    Component.onCompleted: {
+                        requestUser();
+                    }
                 }
             }
 
             GridView {
 
-                anchors.left: buttonUser.horizontalCenter
+                anchors.left: titleRow.horizontalCenter
+
                 width: 760; height: 250
 
                 id: grid
@@ -135,8 +131,9 @@ Window {
                 "Направление ветра: " + directionWind + " \n" +
                 "Скорость ветра: " + speedWind + "м/с \n" +
                 "Влажность: " + vlaznost + "% \n" +
-                "Давление: " + davlenie + "мм рт.ст. \n" +
-                "Предупреждение: " + alert + "\n\n";
+                "Давление: " + davlenie + "мм рт.ст. \n";
+                //"Предупреждение: " + alert + "\n\n";
+
                 if(typeof dataModel.get(6) === "undefined"){
                     dataModel.append({ text: decodedJson,
                     textIcon: "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg" });

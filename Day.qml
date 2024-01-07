@@ -7,7 +7,6 @@ Item{
     Text{
         id: dataText
         text: "12"
-        
     }
 }
 

@@ -55,12 +55,12 @@ Window {
                     font.pointSize: 24
                     color: "black"
 
+
                     Component.onCompleted: {
                         requestUser();
                     }
                 }
             }
-
             GridView {
 
                 anchors.left: titleRow.horizontalCenter

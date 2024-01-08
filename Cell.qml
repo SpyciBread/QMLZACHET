@@ -8,7 +8,9 @@ Item{
 
     signal clicked()
 
+
     width: 180; height: 130
+
 
 
     Rectangle {
@@ -40,5 +42,6 @@ Item{
         onClicked: {
             container.clicked();
         }
+
     }
 }

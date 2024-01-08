@@ -83,9 +83,11 @@ Window {
                 model: dataModel
                 delegate: Cell {
 
+
                     cellColor: "white"; cellText: model.text; dayInf: model.hoursText; cellImage: model.textIcon; onClicked: {
                         stackView.push(pageDay);
                         pageDay.pageText = dayInf;
+
                     }
 
                 }

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
+
 Window {
     id: mainWindow
     signal signalExit
@@ -18,6 +19,7 @@ Window {
         fillMode: Image.PreserveAspectCrop
         source: "pics/background/winter.jpeg"
     }
+
     ScrollView {
         id: scrollView
         width: parent.width
@@ -58,6 +60,7 @@ Window {
 
                     Component.onCompleted: {
                         requestUser();
+
                     }
                 }
             }
@@ -74,7 +77,7 @@ Window {
 
                 model: dataModel
                 delegate: Cell {
-                    cellColor: "white"; cellText: model.text; cellImage: model.textIcon; onClicked: firstWindow.close()
+                    cellColor: "white"; cellText: model.text; dayInfo: model. cellImage: model.textIcon; onClicked: firstWindow.close()
                 }
                 flow: GridView.FlowLeftToRight
                 snapMode: GridView.SnapToRow
@@ -82,8 +85,6 @@ Window {
             }
 
         }
-
-
     }
 
     onSignalExit: {
@@ -101,6 +102,7 @@ Window {
             var minT = item.parts.night_short.temp;
             var maxT = item.parts.day.temp_max;
             var directionWind = item.parts.day.wind_dir;
+            mainIcon.text = item.parts.day.icon;
             if (directionWind === "nw") {
                 directionWind = "Северо-западное"
             } else if (directionWind === "n") {

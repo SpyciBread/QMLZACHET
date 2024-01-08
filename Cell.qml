@@ -5,6 +5,7 @@ Item{
     property alias cellColor: rectangle.color
     property alias cellText: txt.text
     property alias cellImage: image.source
+    property alias dayInf: dayInfo.text
 
     signal clicked()
 
@@ -34,7 +35,16 @@ Item{
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
-
+        Text {
+            visible: false
+            id: dayInfo
+            text: "asdf"
+            font.family: "Helvetica"
+            color: "black"
+            font.pointSize: 7
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 
     MouseArea {

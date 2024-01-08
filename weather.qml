@@ -77,7 +77,7 @@ Window {
 
                 model: dataModel
                 delegate: Cell {
-                    cellColor: "white"; cellText: model.text; cellImage: model.textIcon; onClicked: firstWindow.close()
+                    cellColor: "white"; cellText: model.text; dayInfo: model. cellImage: model.textIcon; onClicked: firstWindow.close()
                 }
                 flow: GridView.FlowLeftToRight
                 snapMode: GridView.SnapToRow

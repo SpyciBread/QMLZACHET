@@ -6,9 +6,9 @@ Window {
     id: mainWindow
     signal signalExit
     visible: true
-    width: 800
-    height: 550
-    title: qsTr("weather app")
+    width: 900
+    height: 700
+    title: qsTr("Weather app")
 
     ScrollView {
         id: scrollView
@@ -83,9 +83,9 @@ Window {
                 model: dataModel
                 delegate: Cell {
 
-                    cellColor: "white"; cellText: model.text; cellImage: model.textIcon; onClicked: {
+                    cellColor: "white"; cellText: model.text; dayInf: model.hoursText; cellImage: model.textIcon; onClicked: {
                         stackView.push(pageDay);
-                        pageDay.pageText = cellText;
+                        pageDay.pageText = dayInf;
                     }
 
                 }
@@ -100,7 +100,7 @@ Window {
         Day {
             id: pageDay
             visible: false
-            buttonText: "назад"
+            buttonText: "Назад"
             pageText: "Погода"
             onButtonClicked: {
                 stackView.pop();
@@ -115,13 +115,13 @@ Window {
     function decodeJson(jsonData) {
         var list = jsonData.forecasts;
         var decodedJson = "";
+        var hoursInfo = "";
         var i = 0;
 
         list.forEach(function(item) {
 
             var date = item.date;
-            var minT = item.parts.night_short.temp;
-            var maxT = item.parts.day.temp_max;
+
             var directionWind = item.parts.day.wind_dir;
             if (directionWind === "nw") {
                 directionWind = "Северо-западное"
@@ -146,19 +146,87 @@ Window {
             var vlaznost = item.parts.day.humidity;
             var davlenie = item.parts.day.pressure_mm;
             var alert = item.parts.day.condition;
+            var tmpMax = -100;
+            var tmpMin = 100;
+            var maxT = tmpMax;
+            var minT = tmpMin;
+
+            item.hours.forEach(function(itemDay) {
+                var directionWind2 = itemDay.wind_dir;
+                if (directionWind2 === "nw") {
+                    directionWind2 = "Северо-западное"
+                } else if (directionWind2 === "n") {
+                    directionWind2 = "Северное"
+                } else if (directionWind2 === "ne") {
+                    directionWind2 = "Северо-восточное"
+                } else if (directionWind2 === "e") {
+                    directionWind2 = "Восточное"
+                } else if (directionWind2 === "se") {
+                    directionWind2 = "Юго-восточное"
+                } else if (directionWind2 === "s") {
+                    directionWind2 = "Южное"
+                } else if (directionWind2 === "sw") {
+                    directionWind2 = "Юго-западное"
+                } else if (directionWind2 === "w") {
+                    directionWind2 = "Западное"
+                } else {
+                    directionWind2 = "Штиль"
+                }
+
+                hoursInfo = hoursInfo + "Час: " + itemDay.hour +
+                    " | Температура: "+ itemDay.temp +" °C"+
+                    " | Влажность: "+ itemDay.humidity + "%" +
+                    " | Давление: "+ itemDay.pressure_mm + " мм рт. ст" +
+                    " | Скорость ветра: "+ itemDay.wind_speed + " м/с" +
+                    " | Направление ветра: "+ directionWind2 + " | <a><img src='https://yastatic.net/weather/i/icons/funky/dark/"+itemDay.icon+".svg'></a> <br/>";
+
+
+                if(itemDay.temp <= tmpMin){
+                    minT = itemDay.temp;
+                    tmpMin = itemDay.temp;
+                }
+
+                if(itemDay.temp >= tmpMax){
+                    maxT = itemDay.temp;
+                    tmpMax = itemDay.temp;
+                }
+
+            });
+            if(tmpMin === 100){
+                if(item.parts.day.temp_min < item.parts.night.temp_min){
+                    var minT = item.parts.day.temp_min;
+                }
+                else{
+                    var minT = item.parts.night.temp_min;
+                }
+            }
+
+            if(tmpMax === -100){
+                if(item.parts.day.temp_max > item.parts.night.temp_max){
+                    var maxT = item.parts.day.temp_max;
+                }
+                else{
+                    var maxT = item.parts.night.temp_max;
+                }
+            }
 
             decodedJson =
                 "Дата: " + date + " \n" +
-                "Перепад температур: min: " + minT + " max: " + maxT+ " \n" +
+                "Перепад температур: " + minT + "|" + maxT +" (°C)"+ " \n" +
                 "Направление ветра: " + directionWind + " \n" +
-                "Скорость ветра: " + speedWind + "м/с \n" +
+                "Скорость ветра: " + speedWind + " м/с \n" +
                 "Влажность: " + vlaznost + "% \n" +
-                "Давление: " + davlenie + "мм рт.ст. \n";
+                "Давление: " + davlenie + " мм рт.ст. \n";
                 //"Предупреждение: " + alert + "\n\n";
+
+
 
                 if(typeof dataModel.get(6) === "undefined"){
                     dataModel.append({ text: decodedJson,
-                    textIcon: "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg" });
+                    textIcon: "https://yastatic.net/weather/i/icons/funky/dark/" + item.parts.day.icon + ".svg",
+                    hoursText: hoursInfo
+                     });
+                    hoursInfo = "";
                 }
 
             i++;
@@ -176,48 +244,12 @@ Window {
             var jsonString = decodeJson(jsonResponse);
         }
 
-        xhr.open("GET", "https://api.weather.yandex.ru/v2/forecast?lat=57.6299&lon=39.8737&lang=ru_RU&limit=7&hours=true");
+        xhr.open("GET", "https://api.weather.yandex.ru/v2/forecast?lat=57.6299&lon=39.8737&lang=ru_RU&limit=7");
         xhr.setRequestHeader("X-Yandex-API-Key", "b8dc3c68-10b0-4be5-ab3c-4513bd33a7b6");
         xhr.send();
     }
 }
 
-/*Window {
-    id: mainWindow
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
-
-    StackView {
-        id: stackView
-        anchors.fill: parent
-        initialItem: page1
-    }
-
-    Day {
-        id: page1
-        visible: true
-        buttonText: "next"
-        pageText: "Hello"
-
-
-
-        onButtonClicked: {
-            stackView.push(page2);
-        }
-    }
-
-    Day {
-        id: page2
-        visible: false
-        buttonText: "back"
-        pageText: "Bye"
-        onButtonClicked: {
-            stackView.pop();
-        }
-    }
-}*/
 
 
 

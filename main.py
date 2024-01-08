@@ -6,7 +6,7 @@ from PySide6.QtQml import QQmlApplicationEngine
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
-    qml_file = Path(__file__).parent / 'weather.qml'
+    qml_file = Path(__file__).parent / 'test.qml'
     engine.load(qml_file)
     if not engine.rootObjects():
         sys.exit(-1)

@@ -6,7 +6,7 @@ Item{
     property alias cellText: txt.text
     property alias cellImage: image.source
 
-    signal clicked(cellColor: color)
+    signal clicked()
 
 
     width: 180; height: 130
@@ -40,7 +40,7 @@ Item{
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            newDay.visible = true
+            container.clicked();
         }
 
     }
